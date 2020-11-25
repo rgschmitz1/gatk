@@ -3,6 +3,8 @@ LABEL maintainer=rgs1<rgs1@uw.edu>
 
 ENV DEBIAN_FRONTEND noninteractive
 
+ARG GATK_VERSION=4.1.9.0
+
 # base utils to be used inside container
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -11,10 +13,10 @@ RUN apt-get update \
       python3-minimal \
       wget \
       unzip \
-    && wget -nv https://github.com/broadinstitute/gatk/releases/download/4.1.9.0/gatk-4.1.9.0.zip \
-    && unzip -q gatk-4.1.9.0.zip -d /root \
-    && rm gatk-4.1.9.0.zip \
-    && apt-get remove -y wget unzip \
+    && wget -nv https://github.com/broadinstitute/gatk/releases/download/$GATK_VERSION/gatk-$GATK_VERSION.zip \
+    && unzip -q gatk-$GATK_VERSION.zip -d /root \
+    && rm gatk-$GATK_VERSION.zip \
+    && apt-get purge -y wget unzip \
     && apt-get autoremove -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -25,4 +27,4 @@ WORKDIR /root
 RUN /bin/bash -c "ln -s /usr/bin/python3 /usr/bin/python"
 
 # add gatk to PATH
-ENV PATH="/root/gatk-4.1.9.0:$PATH"
+ENV PATH="/root/gatk-$GATK_VERSION:$PATH"
