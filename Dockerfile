@@ -1,13 +1,11 @@
 FROM ubuntu:18.04
 LABEL maintainer=rgs1<rgs1@uw.edu>
 
-ENV DEBIAN_FRONTEND noninteractive
-
 ARG GATK_VERSION=4.1.9.0
 
 # base utils to be used inside container
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       libgomp1 \
       openjdk-8-jre-headless \
       python3-minimal \
