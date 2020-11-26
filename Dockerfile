@@ -13,7 +13,8 @@ RUN apk add --update --no-cache \
     && rm gatk-$GATK_VERSION.zip \
     && cd gatk-$GATK_VERSION \
     && wget https://github.com/broadinstitute/gatk/blob/master/LICENSE.TXT \
-    && rm -fr gatkdoc
+    && rm -fr gatkdoc gatk-completion.sh gatkPythonPackageArchive.zip scripts \
+      gatkcondaenv.yml GATKConfig.EXAMPLE.properties README.md
 
 RUN ln -s /lib/libc.musl-x86_64.so.1 /lib/ld-linux-x86-64.so.2
 
