@@ -11,9 +11,8 @@ RUN apk add --update --no-cache \
     && ln -s /lib/libc.musl-x86_64.so.1 /lib/ld-linux-x86-64.so.2 \
     && wget https://github.com/broadinstitute/gatk/releases/download/$GATK_VERSION/gatk-$GATK_VERSION.zip \
     && unzip gatk-$GATK_VERSION.zip *gatk *gatk-package* \
-    && rm gatk-$GATK_VERSION.zip \
-    && cd gatk-$GATK_VERSION \
-    && wget https://github.com/broadinstitute/gatk/blob/master/LICENSE.TXT
+    && wget https://raw.githubusercontent.com/broadinstitute/gatk/master/LICENSE.TXT -P gatk-$GATK_VERSION \
+    && rm gatk-$GATK_VERSION.zip
 
 WORKDIR /root
 
