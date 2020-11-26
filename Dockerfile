@@ -1,28 +1,23 @@
-FROM ubuntu:18.04
+FROM openjdk:8-jre-alpine
 LABEL maintainer=rgs1<rgs1@uw.edu>
 
 ARG GATK_VERSION=4.1.9.0
 
 # base utils to be used inside container
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-      libgomp1 \
-      openjdk-8-jre-headless \
-      python3-minimal \
-      wget \
-      unzip \
-    && wget -nv https://github.com/broadinstitute/gatk/releases/download/$GATK_VERSION/gatk-$GATK_VERSION.zip \
-    && unzip -q gatk-$GATK_VERSION.zip -d /root \
+RUN apk add --update --no-cache \
+      libc6-compat \
+      libgomp \
+      python2 \
+    && wget https://github.com/broadinstitute/gatk/releases/download/$GATK_VERSION/gatk-$GATK_VERSION.zip \
+    && unzip -q gatk-$GATK_VERSION.zip \
     && rm gatk-$GATK_VERSION.zip \
-    && apt-get purge -y wget unzip \
-    && apt-get autoremove -y \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && cd gatk-$GATK_VERSION \
+    && wget https://github.com/broadinstitute/gatk/blob/master/LICENSE.TXT \
+    && rm -fr gatkdoc
+
+RUN ln -s /lib/libc.musl-x86_64.so.1 /lib/ld-linux-x86-64.so.2
 
 WORKDIR /root
 
-# create a symlink from python3 to python
-RUN /bin/bash -c "ln -s /usr/bin/python3 /usr/bin/python"
-
 # add gatk to PATH
-ENV PATH="/root/gatk-$GATK_VERSION:$PATH"
+ENV PATH="/gatk-$GATK_VERSION:$PATH"
